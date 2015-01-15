@@ -1,5 +1,5 @@
-Basic Coding Standard
-=====================
+基本编码规范
+============
 
 This section of the standard comprises what should be considered the standard
 coding elements that are required to ensure a high level of technical
@@ -14,37 +14,34 @@ interpreted as described in [RFC 2119].
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
 
 
-1. Overview
------------
+1. 概述
+-------
 
-- Files MUST use only `<?php` and `<?=` tags.
+- 文件必须只使用 `<?php` 和 `<?=` 标签。
 
-- Files MUST use only UTF-8 without BOM for PHP code.
+- 文件必须是UTF-8编码并且不带BOM头。
 
-- Files SHOULD *either* declare symbols (classes, functions, constants, etc.)
-  *or* cause side-effects (e.g. generate output, change .ini settings, etc.)
-  but SHOULD NOT do both.
+- 文件只能是单一的声明(classes, functions, constants, etc), 不能同时存在多个声明。
 
-- Namespaces and classes MUST follow an "autoloading" PSR: [[PSR-0], [PSR-4]].
+- 命名空间和类必须符合"autoloading" PSR: [[PSR-0], [PSR-4]]. 
 
-- Class names MUST be declared in `StudlyCaps`.
+- 类的名字定义必须为 `StudlyCaps`。
 
-- Class constants MUST be declared in all upper case with underscore separators.
+- 类的常量必须定义为大写并且用下划线分割。
 
-- Method names MUST be declared in `camelCase`.
+- 方法必须定义为 `camelCase` (驼峰)
 
 
-2. Files
---------
+2. 文件
+-------
 
-### 2.1. PHP Tags
+### 2.1. PHP标签
 
-PHP code MUST use the long `<?php ?>` tags or the short-echo `<?= ?>` tags; it
-MUST NOT use the other tag variations.
+PHP代码必须使用长 `<?php ?>` 标签或者短输出 `<?= ?>` 标签; 禁止使用其他的标签。
 
-### 2.2. Character Encoding
+### 2.2. 字符编码
 
-PHP code MUST use only UTF-8 without BOM.
+PHP代码必须只使用UTF-8且不带BOM的编码格式。
 
 ### 2.3. Side Effects
 
