@@ -1,0 +1,78 @@
+自动加载规范
+============
+
+> **Deprecated** - As of 2014-10-21 PSR-0 has been marked as deprecated. [PSR-4] is now recommended 
+as an alternative.
+
+[PSR-4]: http://www.php-fig.org/psr/psr-4/
+
+The following describes the mandatory requirements that must be adhered
+to for autoloader interoperability.
+
+硬性规范
+--------
+
+* 一个完整的命名空间类必须符合该格式 `\<Vendor Name>\(<Namespace>\)*<Class Name>` 。
+* 每个命名空间必须有一个顶级的命名空间 ("Venddor Name")。
+* 每个命名空间允许拥有更多的子命名空间。
+* 每个命名空间的空间分隔符转换为 `DIRECTORY_SEPARATOR` 的时候可以从磁盘加载文件。
+* 没当在类中碰到 `_` 字符的时候转换成 `DIRECTORY_SEPARATOR`， `_` 字符在命名空间中
+  没有特殊意义。
+* 完全限定的命名空间加上后缀 `.php` 可从文件系统导入。
+* 在 vendor names, namespaces, class name允许小写字母大写字母的组合。
+
+例子
+----
+
+* `\Doctrine\Common\IsolatedClassLoader` => `/path/to/project/lib/vendor/Doctrine/Common/IsolatedClassLoader.php`
+* `\Symfony\Core\Request` => `/path/to/project/lib/vendor/Symfony/Core/Request.php`
+* `\Zend\Acl` => `/path/to/project/lib/vendor/Zend/Acl.php`
+* `\Zend\Mail\Message` => `/path/to/project/lib/vendor/Zend/Mail/Message.php`
+
+Underscores in Namespaces and Class Names
+-----------------------------------------
+
+* `\namespace\package\Class_Name` => `/path/to/project/lib/vendor/namespace/package/Class/Name.php`
+* `\namespace\package_name\Class_Name` => `/path/to/project/lib/vendor/namespace/package_name/Class/Name.php`
+
+The standards we set here should be the lowest common denominator for
+painless autoloader interoperability. You can test that you are
+following these standards by utilizing this sample SplClassLoader
+implementation which is able to load PHP 5.3 classes.
+
+Example Implementation
+----------------------
+
+Below is an example function to simply demonstrate how the above
+proposed standards are autoloaded.
+
+```php
+<?php
+
+function autoload($className)
+{
+    $className = ltrim($className, '\\');
+    $fileName  = '';
+    $namespace = '';
+    if ($lastNsPos = strrpos($className, '\\')) {
+        $namespace = substr($className, 0, $lastNsPos);
+        $className = substr($className, $lastNsPos + 1);
+        $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+    }
+    $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+    require $fileName;
+}
+spl_autoload_register('autoload');
+```
+
+SplClassLoader Implementation
+-----------------------------
+
+The following gist is a sample SplClassLoader implementation that can
+load your classes if you follow the autoloader interoperability
+standards proposed above. It is the current recommended way to load PHP
+5.3 classes that follow these standards.
+
+* [http://gist.github.com/221634](http://gist.github.com/221634)
+
